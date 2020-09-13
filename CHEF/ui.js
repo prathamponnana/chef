@@ -1,44 +1,66 @@
-const container = document.querySelector("form");
-const button = document.querySelector(".btn");
-const inpSec = document.querySelector('#inpSection');
-const pElem = document.querySelector('p');
-let html = "";
+const container = document.querySelector("#container");
+const submitBtn = document.querySelector(".submitBtn");
+const showcase = document.querySelector(".showcase");
+const pElem = document.querySelector("p");
+let listLength = '';
+
 class UI {
+    showRes(recepieList) {
+      let rangeStart, rangeEnd;
+      listLength = recepieList.length;
+      [rangeStart , rangeEnd]=[1, 2]
+      console.log(rangeStart,rangeEnd);
+      document.querySelector(".showcase").style.display = "none";
+      let output = recepieList.splice(0,3);
+      paint(output);
+    }
 
-  showRes(recepieList) {
-    document.querySelector("#inpSection").style.display = "none";
-    let output = recepieList.splice(0, 3);
-    paint(output);
-  }
+    showErr(message) {
+      document.querySelector(".inpItem").value = "";
+      const errDiv = document.createElement("div");
+      errDiv.className = "error";
+      errDiv.appendChild(document.createTextNode(message));
+      showcase.insertBefore(errDiv, pElem);
+      setTimeout(this.clearErr, 4000);
+    }
 
-  showErr(message){
-    document.querySelector(".item").value = "";
-    const errDiv = document.createElement('div');
-    errDiv.className = 'error';
-    errDiv.appendChild(document.createTextNode(message));
-    inpSec.insertBefore(errDiv,pElem);
-    setTimeout(this.clearErr,4000);
-  }
-
-  clearErr(){
-    document.querySelector('.error').remove();
-  }
+    clearErr() {
+      document.querySelector(".error").remove();
+    }
 }
 
-function paint(out) {
-  out.forEach((ele) => {
-    html += `<h1>${ele.strMeal}</h1><br>
-            <a href="${ele.strYoutube}"><i class="fab fa-youtube"></i>
-            <i class="fas fa-map-marker-alt"></i></a><hr>`;
+function paint(out){
+  let html = "";
+  out.forEach((ele,index) => {
+    html += `<div id=item-${index+1}>
+            <h1>${ele.strMeal}</h1>
+            <a href="${ele.strYoutube}">Watch <i class="fab fa-youtube"></i>
+            <i class="fas fa-map-marker-alt"></i></a>
+            </div>`;
   });
   resDiv = document.createElement("div");
+  resDiv.id = 'outputList'
   resDiv.innerHTML = html;
-  container.insertBefore(resDiv, button);
-  button.value = "BACK";
+  console.log(resDiv);
+  container.insertBefore(resDiv, submitBtn);
+  submitBtn.value = "BACK";
 
-  button.addEventListener("mousedown", function (e) {
+  submitBtn.addEventListener("mousedown", function(e) {
     if (e.target.value === "BACK") {
       window.location.reload();
     }
   });
+}
+
+function randomRange(listLength){
+  let arr = [],a,b;
+  a = Math.floor(Math.random() * listLength);
+  b = Math.floor(Math.random() * listLength);
+  if(a>=b){
+    randomRange(listLength);
+  } else{
+    arr.push(a);
+    arr.push(b);
+    return arr;
+  }
 }
