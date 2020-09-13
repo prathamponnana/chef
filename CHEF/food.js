@@ -1,11 +1,12 @@
 class Food {
-  constructor(value) {
-    this.value = value;
-    this.url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${this.value}`;
+  constructor(ingredient) {
+    this.ingredient = ingredient;
+    this.url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${this.ingredient}`;
   }
   async getData() {
-      const getRecepie = await fetch(this.url);
-      const getRecepie1 = await getRecepie.json();
-      return getRecepie1.meals;
-    }
+    const fetchRecepie = await fetch(this.url);
+    const recepieList = await fetchRecepie.json();
+    return recepieList.meals;
+  }
 }
+
